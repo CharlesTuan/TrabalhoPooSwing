@@ -26,16 +26,18 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-public class Main {
+public class Main extends JFrame {
 	
 	private static JPanel painel1, painel2;
 	
-	public static void main(String[] args) {
-		JFrame frame = new JFrame();
-		frame.setTitle("Nova Janela");
-		frame.setPreferredSize(new Dimension(300, 300));
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	// atributos de classe
+	JTextField label11 = new JTextField();
+	JTextField label17 = new JTextField();
+	JComboBox<String> comboBox;
+	JComboBox<String> comboBox1;
 	
+	public Main() {
+
 		
 		
 		
@@ -54,7 +56,7 @@ public class Main {
 				// Fecha a tela
 				//frame.setVisible(false);
 				//frame.dispose();
-				frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+				dispatchEvent(new WindowEvent(Main.this, WindowEvent.WINDOW_CLOSING));
 			}
 		});
 		
@@ -116,7 +118,7 @@ public class Main {
 		menuBar.add(menu2);
 		
 		//Adiciona Menu Bar
-		frame.setJMenuBar(menuBar);
+		setJMenuBar(menuBar);
 		
 				
 		
@@ -130,26 +132,44 @@ public class Main {
 		Color colors[] = {Color.WHITE,Color.BLUE
 				,Color.DARK_GRAY,Color.YELLOW,Color.MAGENTA};
 		
+		
 
-			tabPane.addTab("Moeda", icon,criarPainelMoeda(), "Hint do Tab ");
+			tabPane.addTab("moeda", icon,criarPainelMoeda(), "Hint do Tab ");
 			painel1 = criarPanel(Color.decode("#fffccc"), "");
+			
 			JLabel label = new JLabel("De: ");
 			String itens31 [] = {"Celsius","Kelvin"};
 			
-			JComboBox<String> comboBox = new JComboBox<String>(itens31);
+			comboBox = new JComboBox<String>(itens31);
+			
 			comboBox.setSelectedIndex(0);
 			JLabel label20 = new JLabel("                    De: ");
+			
 			String itens131 [] = {"Kelvin","Celsius"};
-			JTextField label11 = new JTextField();
-			JTextField label17 = new JTextField();
+			comboBox1 = new JComboBox<String>(itens131);
+			
 			label17.setPreferredSize(new Dimension(65, 25));
 			label11.setPreferredSize(new Dimension(65, 25));
 			JButton botaozao = new JButton();
 			botaozao.setPreferredSize(new Dimension(130, 25));
 			botaozao.setText("Converter");
 			
-			JComboBox<String> comboBox1 = new JComboBox<String>(itens131);
+			
 			comboBox1.setSelectedIndex(0);
+			botaozao.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					String tempDe = (String) comboBox.getSelectedItem();
+					String tempPara = (String) comboBox1.getSelectedItem();
+					double valorDe = Double.parseDouble(label11.getText());
+					double valorPara = 0;
+					if(tempDe.equals("Celsius") && tempPara.equals("Kelvin")) {
+						valorPara = valorDe * 10;
+					}
+					label17.setText(Double.toString(valorPara));
+				}
+			});
 			painel1.setBorder(BorderFactory.createEmptyBorder(0,0, 0, 10));
 			painel1.add(label);
 			painel1.add(comboBox);
@@ -162,11 +182,13 @@ public class Main {
 			painel1.add(label17);
 			painel1.add(botaozao);
 			
-			tabPane.addTab("moeda", icon, painel1, "Hint do Tab ");
+			
+			
+			tabPane.addTab("temperatura", icon, painel1, "Hint do Tab ");
 			painel2 = criarPanel(Color.decode("#fffccc"), "");
 			
 			JLabel label1 = new JLabel("De: ");
-			tabPane.addTab("moeda", icon, painel2, "Hint do Tab ");
+			tabPane.addTab("Comprimento", icon, painel2, "Hint do Tab ");
 			String itens310 [] = {"Metro","Milimetro"};
 			JComboBox<String> comboBox34 = new JComboBox<String>(itens310);
 			comboBox.setSelectedIndex(0);
@@ -180,8 +202,11 @@ public class Main {
 			botaozaoo.setPreferredSize(new Dimension(130, 25));
 			botaozaoo.setText("Converter");
 			
+			
 			JComboBox<String> comboBox12 = new JComboBox<String>(itens1310);
-			comboBox1.setSelectedIndex(0);
+			comboBox12.setSelectedIndex(0);
+			
+			
 			painel2.setBorder(BorderFactory.createEmptyBorder(0,0, 0, 10));
 			painel2.add(label1);
 			painel2.add(comboBox34);
@@ -193,13 +218,17 @@ public class Main {
 			painel2.add(comboBox12);
 			painel2.add(label170);
 			painel2.add(botaozaoo);
-		
-		
-		// Adiciona o painel na janela
-		frame.add(tabPane);
-		frame.pack();
-		
-		frame.show();
+		add(tabPane);
+		pack();
+		show();
+	}
+	
+	public static void main(String[] args) {
+		Main frame = new Main();
+		frame.setTitle("Nova Janela");
+		frame.setPreferredSize(new Dimension(300, 300));
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	
 
 	}
 	
@@ -235,16 +264,12 @@ public class Main {
 		panel.add(botaozao);
 		return panel;
 	}
-	
-	
-	// Cria um painel com a cor de fundo e um label
     private static JPanel criarPanel(Color color, String texto) {
     	JPanel panel = new JPanel();
     	panel.setToolTipText(texto);
     	panel.setBackground(color);
     	panel.add(new JLabel(texto));
     	panel.setPreferredSize(new Dimension(100, 200));
-    	// Configura um tamanho padrao do painel
     	return panel;
     }
 		
